@@ -1,0 +1,72 @@
+Read Neighborhoods from JSON file
+In [1]:
+import pandas as pd
+import json
+In [2]:
+df = pd.read_json(open('YYZ_Neighborhoods.json', 'r'))
+In [3]:
+df.head()
+Out[3]:
+Postcode	Borough	Neighborhood
+0	M1B	Scarborough	Rouge, Malvern
+1	M1C	Scarborough	Highland Creek, Rouge Hill, Port Union
+2	M1E	Scarborough	Guildwood, Morningside, West Hill
+3	M1G	Scarborough	Woburn
+4	M1H	Scarborough	Cedarbrae
+Read Geo Coordinates
+In [4]:
+coords = pd.read_csv('Geospatial_Coordinates.csv')
+coords.rename(columns={'Postal Code':'Postcode'}, inplace=True)
+In [5]:
+coords.head()
+Out[5]:
+Postcode	Latitude	Longitude
+0	M1B	43.806686	-79.194353
+1	M1C	43.784535	-79.160497
+2	M1E	43.763573	-79.188711
+3	M1G	43.770992	-79.216917
+4	M1H	43.773136	-79.239476
+In [6]:
+df.dtypes
+Out[6]:
+Postcode        object
+Borough         object
+Neighborhood    object
+dtype: object
+In [7]:
+coords.dtypes
+Out[7]:
+Postcode      object
+Latitude     float64
+Longitude    float64
+dtype: object
+Join two Pandas DataFrames
+In [8]:
+df = df.set_index('Postcode').join(coords.set_index('Postcode')).reset_index()
+In [9]:
+df
+Out[9]:
+Postcode	Borough	Neighborhood	Latitude	Longitude
+0	M1B	Scarborough	Rouge, Malvern	43.806686	-79.194353
+1	M1C	Scarborough	Highland Creek, Rouge Hill, Port Union	43.784535	-79.160497
+2	M1E	Scarborough	Guildwood, Morningside, West Hill	43.763573	-79.188711
+3	M1G	Scarborough	Woburn	43.770992	-79.216917
+4	M1H	Scarborough	Cedarbrae	43.773136	-79.239476
+...	...	...	...	...	...
+98	M9N	York	Weston	43.706876	-79.518188
+99	M9P	Etobicoke	Westmount	43.696319	-79.532242
+100	M9R	Etobicoke	Kingsview Village, Martin Grove Gardens, Richv...	43.688905	-79.554724
+101	M9V	Etobicoke	Albion Gardens, Beaumond Heights, Humbergate, ...	43.739416	-79.588437
+102	M9W	Etobicoke	Northwest	43.706748	-79.594054
+103 rows × 5 columns
+
+Save DataFrame as JSON file
+In [10]:
+j = df.to_dict()
+In [11]:
+import json
+
+with open('YYZ_Neighborhoods_with_Geo.json', 'w') as f:
+    
+    json.dump(j, f)
+In [ ]:
