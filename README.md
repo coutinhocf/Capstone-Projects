@@ -1,2 +1,3 @@
-# Coursera_Capstone
-For coursera capstone
+# Coursera_Capstone_Course
+
+Projects for Capstone Course, in order to complete the IBM Certification Path.
